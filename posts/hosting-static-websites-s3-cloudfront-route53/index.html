@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="author" content="Amr Awad">
+    <meta name="description" content="Amr Awad&#39;s personal website">
+    <meta name="keywords" content="blog,developer,personal">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Hosting static websites on s3, CloudFront and Route 53 (CD pipeline included)"/>
+<meta name="twitter:description" content="Learn to setup your website in easy steps"/>
+
+    <meta property="og:title" content="Hosting static websites on s3, CloudFront and Route 53 (CD pipeline included)" />
+<meta property="og:description" content="Learn to setup your website in easy steps" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://amrawadk.github.io/posts/hosting-static-websites-s3-cloudfront-route53/" />
+<meta property="article:published_time" content="2019-11-23T23:21:15&#43;02:00"/>
+<meta property="article:modified_time" content="2019-11-23T23:21:15&#43;02:00"/>
+
+
+    
+      <base href="https://amrawadk.github.io/posts/hosting-static-websites-s3-cloudfront-route53/">
+    
+    <title>
+  Hosting static websites on s3, CloudFront and Route 53 (CD pipeline included) · Amr Awad
+</title>
+
+    
+      <link rel="canonical" href="https://amrawadk.github.io/posts/hosting-static-websites-s3-cloudfront-route53/">
+    
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" integrity="sha256-oSrCnRYXvHG31SBifqP2PM1uje7SJUyX0nTwO2RJV54=" crossorigin="anonymous" />
+
+    
+      
+      
+      <link rel="stylesheet" href="https://amrawadk.github.io/css/coder.min.28d751104f30c16da1aa1bb04015cbe662cacfe0d1b01af4f2240ad58580069c.css" integrity="sha256-KNdREE8wwW2hqhuwQBXL5mLKz&#43;DRsBr08iQK1YWABpw=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="https://amrawadk.github.io/img/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://amrawadk.github.io/img/favicon-16x16.png" sizes="16x16">
+
+    <meta name="generator" content="Hugo 0.54.0" />
+  </head>
+
+  <body class=" ">
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="https://amrawadk.github.io/">
+      Amr Awad
+    </a>
+    <input type="checkbox" id="menu-toggle" />
+    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
+    <ul class="navigation-list">
+      
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://amrawadk.github.io/posts/">Blog</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://amrawadk.github.io/about/">About</a>
+          </li>
+        
+      
+      
+    </ul>
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">Hosting static websites on s3, CloudFront and Route 53 (CD pipeline included)</h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fas fa-calendar"></i>
+              <time datetime='2019-11-23T23:21:15&#43;02:00'>
+                November 23, 2019
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fas fa-clock"></i>
+              6 minutes read
+            </span>
+          </div>
+          <div class="categories">
+  <i class="fas fa-folder"></i>
+    <a href="https://amrawadk.github.io/categories/deployment/">deployment</a></div>
+
+          <div class="tags">
+  <i class="fas fa-tag"></i>
+    <a href="https://amrawadk.github.io/tags/aws/">aws</a>
+      <span class="separator">•</span>
+    <a href="https://amrawadk.github.io/tags/cloudfront/">CloudFront</a>
+      <span class="separator">•</span>
+    <a href="https://amrawadk.github.io/tags/route53/">Route53</a>
+      <span class="separator">•</span>
+    <a href="https://amrawadk.github.io/tags/hosting/">Hosting</a>
+      <span class="separator">•</span>
+    <a href="https://amrawadk.github.io/tags/frontend/">FrontEnd</a></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+
+<h1 id="hosting-static-websites-on-s3-cloudfront-route-53-cd-pipeline-included">Hosting static websites on s3 + CloudFront + Route 53 (CD pipeline included)</h1>
+
+<p>AWS S3 provides a cost-efficient solution for hosting static websites - built through static website engines or any frontend framework including React -, and they are almost hassle free as you don&rsquo;t have to manage any servers or worry about load balancing. Additionaly with CloudFront, you get very good website speed and you&rsquo;re able to easily add free HTTPS support to your website with AWS ACM, add basic authentication with AWS Lambda (which we might explore later)</p>
+
+<p>This article will guide you through:</p>
+
+<ul>
+<li>Setting up an S3 bucket for hosting your static files</li>
+<li>Setting up a CloudFront distribution</li>
+<li>Setting up a Route 53 rule to add a custom domain</li>
+<li>Setting up a CI/CD flow to continuously deploy your builds</li>
+<li>General notes
+
+<ul>
+<li>Hosting multiple websites in the same S3 bucket</li>
+<li>Alternative Cloudfront cache invalidation command</li>
+<li>Workaround for SPAs using routers</li>
+</ul></li>
+</ul>
+
+<p>Before starting, please note that the custom domain you intend to use needs to be hosted on Route 53, and if you intend to add HTTPS support, you should have a certificate for your domain name from AWS ACM.</p>
+
+<h2 id="setting-up-an-s3-bucket-for-hosting-your-static-files">Setting up an S3 Bucket for hosting your static files</h2>
+
+<p>To create an AWS S3 bucket, use the following steps:</p>
+
+<ol>
+<li>head over to <a href="https://s3.console.aws.amazon.com/s3">AWS S3 interface</a></li>
+<li>Press the <code>Create Bucket</code> Button, enter the bucket name &amp; region then press <code>Create</code>.</li>
+</ol>
+
+<p><strong>Note:</strong> the AWS defaults are acceptable, we don&rsquo;t need to allow public access to our bucket because we want the website to be onle accessibly through CloudFront, to get the speed and security advantages.</p>
+
+<h2 id="setting-up-a-cloudfront-distribution">Setting up a CloudFront distribution</h2>
+
+<p>Head over to <a href="https://console.aws.amazon.com/CloudFront">AWS CloudFront interface</a>, and do the following:</p>
+
+<ol>
+<li>Press the <code>Create Distribution</code> button</li>
+<li>You&rsquo;ll be presented with a choice for <code>Web</code> or <code>RTMP</code> distribution, choose <code>Web</code></li>
+<li>For <code>Origin Domain Name</code>, you&rsquo;ll be presented with a list of s3 buckets among other things, choose the s3 bucket you created in the previous step. The name will follow the format: <code>&lt;bucket_name&gt;.s3.amazonaws.com</code></li>
+<li>For <code>Origin Path</code>, this is the root path of your static website, we can just add <code>/</code> there.</li>
+<li>Check the option <code>Restrict Bucket Access</code>, This will remove public access for the s3 bucket - which is the default configuration when creating an S3 bucket - so access is only allowed through CloudFront.</li>
+<li>For <code>Origin Access Identity</code>, choose &ldquo;Create a New Identity&rdquo;. This will create a new identity for the CloudFront distribution to be able to read the bucket contents.</li>
+<li>For <code>Grant Read Permissions on Bucket</code>, choose: &ldquo;Yes, Update Bucket Policy&rdquo;</li>
+<li>Set the <code>Default Root Object</code> to &ldquo;index.html&rdquo;
+<br /></li>
+</ol>
+
+<p>These settings are enough to host a website on CloudFront and make it accessible through a CloudFront url, which looks like: <code>&lt;random_string&gt;.CloudFront.net</code>, If you want to use your own domain name, then you&rsquo;ll need:
+- A custom ACM certificate from Amazon</p>
+
+<p>If you have that, then you can add the following settings:
+9. For <code>Alternate Domain Names</code>, enter the domain name that you intend on using, for example: <code>example.com</code>
+10. For <code>SSL Certificate</code>, Choose &ldquo;Custom SSL Certificate&rdquo; and enter you ACM certificate id.</p>
+
+<h2 id="setting-up-a-route-53-rule-to-add-a-custom-domain">Setting up a Route 53 rule to add a custom domain</h2>
+
+<p>Assuming you have confiured your distibution with an alternate domain name - check the last 2 steps in the previous chapter -, then there&rsquo;s one more step before you can server your website at that url, you need to add a route 53 rule by:</p>
+
+<ol>
+<li>Head over to <a href="https://console.aws.amazon.com/route53">AWS Route 53 interface</a></li>
+<li>Click the button <code>Create Hosted Zone</code>, and enter your domain name, choose &ldquo;Public Hosted Zone&rdquo; for the Type.</li>
+<li>Enter your hosted zone and click <code>Create Record Set</code></li>
+<li>Choose the name of the record set, this will be the prefix of you website url - i.e <code>&lt;record_set_name&gt;.example.com</code> -, leave it black for using the root domain name.</li>
+<li>For <code>Record Type</code> choose &ldquo;A - IPV4 Address&rdquo;</li>
+<li>For <code>Alias</code> choose yes.</li>
+<li>For <code>Alias Target</code>, you should see your CloudFront distibution under <code>CloudFront distributions</code> section in the drop down menu, that&rsquo;s if you have it configured correctly.</li>
+<li>Press &ldquo;create&rdquo;.</li>
+</ol>
+
+<p>That&rsquo;s it : ) Once the cloud front distibution is deployed, you should be able to navigate to your url and see your website.</p>
+
+<h2 id="setting-up-a-ci-cd-flow-to-continuously-deploy-your-builds">Setting up a CI/CD flow to continuously deploy your builds</h2>
+
+<p>Now that the setup is configured, the last step is to continuosly deploy content to our s3 bucket as we build new versions of our website, that would involve 2 steps:</p>
+
+<ol>
+<li>Update the content in S3 bucket</li>
+<li>Invalidate CloudFront&rsquo;s cache so it serves the new content</li>
+</ol>
+
+<p>We will use 2 simple commands from <a href="https://aws.amazon.com/cli/">AWS CLI</a> for these steps, which you can integrate easily into your CI/CD pipeline regardless of the platform you use.</p>
+
+<h3 id="step-1-pushing-new-builds-to-s3-bucket">Step 1: Pushing new builds to S3 bucket</h3>
+
+<p>For the first step, you can use this command:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">aws s3 sync &lt;build_dir&gt; s3://&lt;bucket_name&gt;&lt;origin_path&gt; --delete</code></pre></div>
+<p>This command will synchronize a local folder - in our case the build directory <code>&lt;build_dir&gt;</code> - to an s3 destination - which is in our case a combination of the bucket name and the CloudFront&rsquo;s origin path`.</p>
+
+<p>Note: the <code>--delete</code> argument removes and files/folders in the destination that don&rsquo;t exist in the source directory, making sure that no files are left over between builds in the s3 directory.</p>
+
+<h3 id="step-2-invalidate-cloudfront-s-cache">Step 2: Invalidate CloudFront&rsquo;s cache</h3>
+
+<p>For the first step, you can use this command:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">aws CloudFront create-invalidation --distribution-id &lt;cloud_front_distribution_id&gt; --paths <span style="font-style:italic">&#34;&lt;origin_path&gt;*&#34;</span></code></pre></div>
+<p>This command will create an invalidation for a CloudFront distribution, forcing CloudFront to serve the updated content. For the <code>--paths</code> argument, if your origin path was set to <code>/</code> for example, you would use <code>--paths &quot;/*&quot;</code> to invalidate all files and folders under that path.</p>
+
+<h2 id="general-notes">General Notes</h2>
+
+<p>###
+In step 4 in &ldquo;Setting up a CloudFront distribution&rdquo; , you can use the <code>Origin Path</code> option to host multiple websites from the same s3 bucket, for example if you have a development and production version of your website in the same bucket at <code>/dev</code> and <code>/prod</code> respectively, then you can use <code>/dev</code> in the <code>Origin Path</code> here.</p>
+
+<h3 id="alternative-invalidation-command">Alternative Invalidation command</h3>
+
+<p>Some tutorials recommend using an invalidation file:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="">#</span> <span style="">filename:</span> <span style="">invalidation-batch.json</span>
+{
+ <span style="font-weight:bold">&#34;Paths&#34;</span>: {
+   <span style="font-weight:bold">&#34;Quantity&#34;</span>: 1,
+   <span style="font-weight:bold">&#34;Items&#34;</span>: [
+     <span style="font-style:italic">&#34;/*&#34;</span>
+   ]
+ },
+ <span style="font-weight:bold">&#34;CallerReference&#34;</span>: <span style="font-style:italic">&#34;clear-caches&#34;</span>
+}</code></pre></div>
+<p>and updating the command to be:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">aws CloudFront create-invalidation --distribution-id &lt;distribtuion_id&gt; --invalidation-batch file://invalidation-batch.json</pre></div>
+<p>But one important thing to note here is the &ldquo;CallerReference&rdquo; key in the json file, if the reference &amp; paths keys are the same, then AWS will not create a new invalidation, and it will actually return the last created invalidation for that file. So unless you plan on changing the &ldquo;CallerReference&rdquo; dynamically, I prefer to user the <code>--paths</code> argument</p>
+
+<h3 id="workaround-for-spas-using-routers">Workaround for SPAs using routers</h3>
+
+<p>For SPAs, when using urls for your app, you might get 403s for any pages aside for the home url if you&rsquo;re using routers like React Router or Vuex, and that&rsquo;s because we have restricted access to the bucket and the url is trying to access the bucket directly which results in a 403 - even if the url isn&rsquo;t pointing to an actual file in the bucket - The workaround is to add a custom error response to the CloudFront diistribution, which changes <code>403</code> response to <code>200</code> and redirects the request to the index page.</p>
+
+      </div>
+
+      <footer>
+        
+
+
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "amrawadk" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </footer>
+    </article>
+
+    
+  </section>
+
+      </div>
+
+      <footer class="footer">
+  <section class="container">
+    
+      <p>Be the change you want to see in the world</p>
+    
+     © 2019
+    
+       · 
+      Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+    
+    
+  </section>
+</footer>
+
+    </main>
+
+    
+
+  </body>
+
+</html>

@@ -6,19 +6,18 @@
     <description>Recent content in Posts on Amr Awad</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 05 Apr 2019 23:21:15 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 23 Nov 2019 23:21:15 +0200</lastBuildDate>
     
 	<atom:link href="https://amrawadk.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>PlantUML - Generate UML diagrams from text</title>
-      <link>https://amrawadk.github.io/posts/plantuml-generate-uml-from-text/</link>
-      <pubDate>Fri, 05 Apr 2019 23:21:15 +0200</pubDate>
+      <title>Hosting static websites on s3, CloudFront and Route 53 (CD pipeline included)</title>
+      <link>https://amrawadk.github.io/posts/hosting-static-websites-s3-cloudfront-route53/</link>
+      <pubDate>Sat, 23 Nov 2019 23:21:15 +0200</pubDate>
       
-      <guid>https://amrawadk.github.io/posts/plantuml-generate-uml-from-text/</guid>
-      <description>Motivation It&amp;rsquo;s often the case that a software project the does something meaningful can gradually grow into a very complex system, having the ability to visualize the different components and states of the software can make a big difference in understanding the system.
-Since I have first learned about UML, I found that it works great for representing complexity in a way that&amp;rsquo;s easy to reason about, at many points in the different projects I worked on, I was always reaching for a UML diagram to quickly share my thoughts with my teammates in an easy to grasp way.</description>
+      <guid>https://amrawadk.github.io/posts/hosting-static-websites-s3-cloudfront-route53/</guid>
+      <description>Hosting static websites on s3 + CloudFront + Route 53 (CD pipeline included) AWS S3 provides a cost-efficient solution for hosting static websites - built through static website engines or any frontend framework including React -, and they are almost hassle free as you don&amp;rsquo;t have to manage any servers or worry about load balancing. Additionaly with CloudFront, you get very good website speed and you&amp;rsquo;re able to easily add free HTTPS support to your website with AWS ACM, add basic authentication with AWS Lambda (which we might explore later)</description>
     </item>
     
   </channel>

@@ -3,18 +3,24 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://amrawadk.github.io/posts/hosting-static-websites-s3-cloudfront-route53/</loc>
+    <lastmod>2019-11-23T23:21:15+02:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://amrawadk.github.io/about/</loc>
     <lastmod>2019-04-06T09:03:57+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://amrawadk.github.io/posts/plantuml-generate-uml-from-text/</loc>
-    <lastmod>2019-04-05T23:21:15+02:00</lastmod>
+    <loc>https://amrawadk.github.io/</loc>
+    <lastmod>2019-11-23T23:21:15+02:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://amrawadk.github.io/</loc>
-    <lastmod>2019-04-06T09:03:57+02:00</lastmod>
+    <loc>https://amrawadk.github.io/tags/aws/</loc>
+    <lastmod>2019-11-23T23:21:15+02:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -24,26 +30,44 @@
   </url>
   
   <url>
-    <loc>https://amrawadk.github.io/tags/plantuml/</loc>
-    <lastmod>2019-04-05T23:21:15+02:00</lastmod>
+    <loc>https://amrawadk.github.io/tags/cloudfront/</loc>
+    <lastmod>2019-11-23T23:21:15+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://amrawadk.github.io/categories/deployment/</loc>
+    <lastmod>2019-11-23T23:21:15+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://amrawadk.github.io/tags/frontend/</loc>
+    <lastmod>2019-11-23T23:21:15+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://amrawadk.github.io/tags/hosting/</loc>
+    <lastmod>2019-11-23T23:21:15+02:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://amrawadk.github.io/posts/</loc>
-    <lastmod>2019-04-05T23:21:15+02:00</lastmod>
+    <lastmod>2019-11-23T23:21:15+02:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://amrawadk.github.io/categories/productivity/</loc>
-    <lastmod>2019-04-05T23:21:15+02:00</lastmod>
+    <loc>https://amrawadk.github.io/tags/route53/</loc>
+    <lastmod>2019-11-23T23:21:15+02:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://amrawadk.github.io/tags/</loc>
-    <lastmod>2019-04-05T23:21:15+02:00</lastmod>
+    <lastmod>2019-11-23T23:21:15+02:00</lastmod>
     <priority>0</priority>
   </url>
   
